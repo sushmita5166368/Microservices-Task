@@ -1,0 +1,47 @@
+services:
+  user-service:
+   build: 
+     context: ./microservices/user-service
+     dockerfile: Dockerfile
+   ports:  
+    - "3000:3000"
+   networks:
+    - microservices
+
+  product-service:
+    build:
+      context: ./microservices/product-service
+      dockerfile: Dockerfile
+    ports: 
+      - "3001:3001"
+    networks:
+      - microservices
+
+  gateway-service:
+    build: 
+      context: ./microservices/gateway-service
+      dockerfile: Dockerfile
+    ports: 
+      - "3003:3003"  
+    networks:
+      - microservices    
+    depends_on:
+        - user-service
+        - product-service
+        - order-service
+
+  order-service:
+    build: 
+      context: ./microservices/order-service
+    ports: 
+      - "3002:3002"
+    networks:
+      - microservices
+
+networks:
+  microservices:
+    driver: bridge
+    
+    
+  
+
